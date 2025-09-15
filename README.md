@@ -29,3 +29,6 @@ chmod +x run.sh && ./run.sh
 #   BIND_IF=utun6 ./run.sh
 #   BIND_IP=10.8.0.5 ./run.sh
 
+## Pre steps
+# 1) Download osc if not yet available
+wget https://static.tp-link.com/upload/software/2025/202508/20250802/omada_v5.15.24.19_linux_x64_20250724152622.deb
