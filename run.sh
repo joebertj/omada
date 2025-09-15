@@ -37,6 +37,10 @@ docker volume create omada-logs >/dev/null || true
 
 # Run
 exec docker run -d --name "$NAME" --platform="$PLATFORM" \
+  --cap-add=SETPCAP \
+  --cap-add=NET_BIND_SERVICE \
+  --cap-add=SETFCAP \
+  --privileged \
   $(port 8043) \
   $(port 8088) \
   $(port_udp 27001) \
