@@ -49,6 +49,9 @@ exec docker run -d --name "$NAME" --platform="$PLATFORM" \
   $(port 29811) \
   $(port 29812) \
   $(port 29813) \
+  $(port 29814) \
+  $(port 29815) \
+  $(port 29816) \
   -v omada-data:/opt/tplink/EAPController/data \
   -v omada-logs:/opt/tplink/EAPController/logs \
   --restart unless-stopped \
