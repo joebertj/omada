@@ -88,7 +88,7 @@ fi
 if ! command -v mongod >/dev/null 2>&1 || [[ "$(mongod --version | grep 'db version' | awk '{print $3}')" != "v4.4.29" ]]; then
   echo "  → Setting up MongoDB 4.4 repository..."
   curl -fsSL https://pgp.mongodb.com/server-4.4.asc \
-    | sudo gpg --dearmor -o /usr/share/keyrings/mongodb-4.4.gpg
+    | sudo gpg --no-tty --dearmor -o /usr/share/keyrings/mongodb-4.4.gpg
 
   echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-4.4.gpg ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" \
     | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
