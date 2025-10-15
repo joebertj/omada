@@ -71,8 +71,40 @@ sudo apt-get install -y --no-install-recommends \
 echo "  → Dependencies installed"
 echo ""
 
-# Step 4: Install MongoDB 4.4.29
-echo "[4/6] Installing MongoDB 4.4.29..."
+# Step 4: Install legacy dependencies (needed before MongoDB)
+echo "[4/6] Installing legacy dependencies..."
+
+# Find the omada directory (could be ~/omada or current directory)
+OMADA_DIR="$HOME/omada"
+if [[ ! -d "$OMADA_DIR" ]]; then
+  OMADA_DIR="$(cd "$(dirname "$0")" && pwd)"
+fi
+
+if [[ -f "$OMADA_DIR/libssl1.1_1.1.0g-2ubuntu4_amd64.deb" ]]; then
+  echo "  → Installing libssl1.1..."
+  sudo dpkg -i "$OMADA_DIR/libssl1.1_1.1.0g-2ubuntu4_amd64.deb" || {
+    sudo apt-get update && sudo apt-get -y -f install
+    sudo dpkg -i "$OMADA_DIR/libssl1.1_1.1.0g-2ubuntu4_amd64.deb"
+  }
+else
+  echo "  ✗ Warning: libssl1.1 .deb not found in $OMADA_DIR"
+fi
+
+if [[ -f "$OMADA_DIR/libcommons-daemon-java_1.0.15-11build1_all.deb" ]]; then
+  echo "  → Installing libcommons-daemon-java..."
+  sudo dpkg -i "$OMADA_DIR/libcommons-daemon-java_1.0.15-11build1_all.deb" || {
+    sudo apt-get -y -f install
+    sudo dpkg -i "$OMADA_DIR/libcommons-daemon-java_1.0.15-11build1_all.deb"
+  }
+else
+  echo "  ✗ Warning: libcommons-daemon-java .deb not found in $OMADA_DIR"
+fi
+
+echo "  → Legacy dependencies installed"
+echo ""
+
+# Step 5: Install MongoDB 4.4.29
+echo "[5/6] Installing MongoDB 4.4.29..."
 
 # Check if MongoDB is already installed
 if command -v mongod >/dev/null 2>&1; then
@@ -113,38 +145,6 @@ if ! command -v mongod >/dev/null 2>&1 || [[ "$(mongod --version | grep 'db vers
   echo "  → MongoDB 4.4.29 installed"
 fi
 
-echo ""
-
-# Step 5: Install legacy dependencies
-echo "[5/6] Installing legacy dependencies..."
-
-# Find the omada directory (could be ~/omada or current directory)
-OMADA_DIR="$HOME/omada"
-if [[ ! -d "$OMADA_DIR" ]]; then
-  OMADA_DIR="$(cd "$(dirname "$0")" && pwd)"
-fi
-
-if [[ -f "$OMADA_DIR/libssl1.1_1.1.0g-2ubuntu4_amd64.deb" ]]; then
-  echo "  → Installing libssl1.1..."
-  sudo dpkg -i "$OMADA_DIR/libssl1.1_1.1.0g-2ubuntu4_amd64.deb" || {
-    sudo apt-get update && sudo apt-get -y -f install
-    sudo dpkg -i "$OMADA_DIR/libssl1.1_1.1.0g-2ubuntu4_amd64.deb"
-  }
-else
-  echo "  ✗ Warning: libssl1.1 .deb not found in $OMADA_DIR"
-fi
-
-if [[ -f "$OMADA_DIR/libcommons-daemon-java_1.0.15-11build1_all.deb" ]]; then
-  echo "  → Installing libcommons-daemon-java..."
-  sudo dpkg -i "$OMADA_DIR/libcommons-daemon-java_1.0.15-11build1_all.deb" || {
-    sudo apt-get -y -f install
-    sudo dpkg -i "$OMADA_DIR/libcommons-daemon-java_1.0.15-11build1_all.deb"
-  }
-else
-  echo "  ✗ Warning: libcommons-daemon-java .deb not found in $OMADA_DIR"
-fi
-
-echo "  → Legacy dependencies installed"
 echo ""
 
 # Step 6: Install Omada and restore data
