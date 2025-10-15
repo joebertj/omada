@@ -13,10 +13,10 @@ echo ""
 
 # Step 1: Stop container
 echo "[1/6] Stopping Omada container..."
-if docker ps --format '{{.Names}}' | grep -qx "$CONTAINER_NAME"; then
+if sudo docker ps --format '{{.Names}}' | grep -qx "$CONTAINER_NAME"; then
   echo "  → Stopping container: $CONTAINER_NAME"
-  docker stop "$CONTAINER_NAME"
-elif docker ps -a --format '{{.Names}}' | grep -qx "$CONTAINER_NAME"; then
+  sudo docker stop "$CONTAINER_NAME"
+elif sudo docker ps -a --format '{{.Names}}' | grep -qx "$CONTAINER_NAME"; then
   echo "  → Container $CONTAINER_NAME already stopped"
 else
   echo "  → Container $CONTAINER_NAME not found"
@@ -29,18 +29,18 @@ echo "[2/6] Backing up Docker volume data..."
 mkdir -p "$BACKUP_DIR"
 
 # Check if volumes exist
-if docker volume ls --format '{{.Name}}' | grep -q "omada-data"; then
+if sudo docker volume ls --format '{{.Name}}' | grep -q "omada-data"; then
   echo "  → Copying omada-data volume..."
-  docker run --rm -v omada-data:/source -v "$BACKUP_DIR":/backup ubuntu:24.04 \
+  sudo docker run --rm -v omada-data:/source -v "$BACKUP_DIR":/backup ubuntu:24.04 \
     bash -c "cd /source && tar czf /backup/omada-data.tar.gz ."
   echo "  → Data backed up to $BACKUP_DIR/omada-data.tar.gz"
 else
   echo "  → Warning: omada-data volume not found"
 fi
 
-if docker volume ls --format '{{.Name}}' | grep -q "omada-logs"; then
+if sudo docker volume ls --format '{{.Name}}' | grep -q "omada-logs"; then
   echo "  → Copying omada-logs volume..."
-  docker run --rm -v omada-logs:/source -v "$BACKUP_DIR":/backup ubuntu:24.04 \
+  sudo docker run --rm -v omada-logs:/source -v "$BACKUP_DIR":/backup ubuntu:24.04 \
     bash -c "cd /source && tar czf /backup/omada-logs.tar.gz ."
   echo "  → Logs backed up to $BACKUP_DIR/omada-logs.tar.gz"
 else
@@ -227,9 +227,9 @@ echo "Next steps:"
 echo "  1. Verify Omada is accessible at the URL above"
 echo "  2. Check that your data/configuration was restored"
 echo "  3. If everything works, you can remove the old container:"
-echo "     docker rm $CONTAINER_NAME"
+echo "     sudo docker rm $CONTAINER_NAME"
 echo "  4. Optionally remove Docker volumes:"
-echo "     docker volume rm omada-data omada-logs"
+echo "     sudo docker volume rm omada-data omada-logs"
 echo ""
 echo "================================================"
 
