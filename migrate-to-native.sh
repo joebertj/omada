@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Configuration
-REMOTE_HOST="19.27.79.7"
+REMOTE_HOST="10.27.79.7"
 SSH_KEY="$HOME/.ssh/klti"
 CONTAINER_NAME="omada"
 BACKUP_DIR="/tmp/omada-backup-$(date +%Y%m%d-%H%M%S)"
