@@ -13,43 +13,47 @@ if ! sudo ufw status | grep -q "Status: active"; then
 fi
 
 echo "Configuring firewall rules for Omada Controller..."
+echo "Restricting access to 10.27.79.0/24 subnet only"
 echo ""
 
-# Web UI ports
-echo "→ Allowing port 8043/tcp (HTTPS Web UI)"
-sudo ufw allow 8043/tcp comment 'Omada HTTPS Web UI'
+# Subnet restriction
+SUBNET="10.27.79.0/24"
 
-echo "→ Allowing port 8088/tcp (HTTP Web UI)"
-sudo ufw allow 8088/tcp comment 'Omada HTTP Web UI'
+# Web UI ports
+echo "→ Allowing port 8043/tcp (HTTPS Web UI) from $SUBNET"
+sudo ufw allow from "$SUBNET" to any port 8043 proto tcp comment 'Omada HTTPS Web UI'
+
+echo "→ Allowing port 8088/tcp (HTTP Web UI) from $SUBNET"
+sudo ufw allow from "$SUBNET" to any port 8088 proto tcp comment 'Omada HTTP Web UI'
 
 # Discovery and management ports
-echo "→ Allowing port 27001/udp (Discovery)"
-sudo ufw allow 27001/udp comment 'Omada Discovery'
+echo "→ Allowing port 27001/udp (Discovery) from $SUBNET"
+sudo ufw allow from "$SUBNET" to any port 27001 proto udp comment 'Omada Discovery'
 
-echo "→ Allowing port 27002/tcp (Manager)"
-sudo ufw allow 27002/tcp comment 'Omada Manager'
+echo "→ Allowing port 27002/tcp (Manager) from $SUBNET"
+sudo ufw allow from "$SUBNET" to any port 27002 proto tcp comment 'Omada Manager'
 
 # EAP management ports
-echo "→ Allowing port 29810/udp (EAP Discovery)"
-sudo ufw allow 29810/udp comment 'Omada EAP Discovery'
+echo "→ Allowing port 29810/udp (EAP Discovery) from $SUBNET"
+sudo ufw allow from "$SUBNET" to any port 29810 proto udp comment 'Omada EAP Discovery'
 
-echo "→ Allowing port 29811/tcp (EAP Management)"
-sudo ufw allow 29811/tcp comment 'Omada EAP Management'
+echo "→ Allowing port 29811/tcp (EAP Management) from $SUBNET"
+sudo ufw allow from "$SUBNET" to any port 29811 proto tcp comment 'Omada EAP Management'
 
-echo "→ Allowing port 29812/tcp (EAP Adoption)"
-sudo ufw allow 29812/tcp comment 'Omada EAP Adoption'
+echo "→ Allowing port 29812/tcp (EAP Adoption) from $SUBNET"
+sudo ufw allow from "$SUBNET" to any port 29812 proto tcp comment 'Omada EAP Adoption'
 
-echo "→ Allowing port 29813/tcp (EAP Upgrade)"
-sudo ufw allow 29813/tcp comment 'Omada EAP Upgrade'
+echo "→ Allowing port 29813/tcp (EAP Upgrade) from $SUBNET"
+sudo ufw allow from "$SUBNET" to any port 29813 proto tcp comment 'Omada EAP Upgrade'
 
-echo "→ Allowing port 29814/tcp (EAP Statistics)"
-sudo ufw allow 29814/tcp comment 'Omada EAP Statistics'
+echo "→ Allowing port 29814/tcp (EAP Statistics) from $SUBNET"
+sudo ufw allow from "$SUBNET" to any port 29814 proto tcp comment 'Omada EAP Statistics'
 
-echo "→ Allowing port 29815/tcp (EAP RTT)"
-sudo ufw allow 29815/tcp comment 'Omada EAP RTT'
+echo "→ Allowing port 29815/tcp (EAP RTT) from $SUBNET"
+sudo ufw allow from "$SUBNET" to any port 29815 proto tcp comment 'Omada EAP RTT'
 
-echo "→ Allowing port 29816/tcp (EAP Log)"
-sudo ufw allow 29816/tcp comment 'Omada EAP Log'
+echo "→ Allowing port 29816/tcp (EAP Log) from $SUBNET"
+sudo ufw allow from "$SUBNET" to any port 29816 proto tcp comment 'Omada EAP Log'
 
 echo ""
 echo "Firewall rules applied. Current status:"
